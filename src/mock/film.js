@@ -1,8 +1,6 @@
-import {GENRES, ALL_NAMES} from '../const.js';
+import {GENRES, ALL_NAMES, COUNTRIES} from '../consts.js';
 import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils.js';
-import {generateComments} from './comments.js';
-
-const COUNTRIES= ['Russia', 'USA', 'England', 'India', 'Spain'];
+import {generateAllFilmsComments} from './comments.js';
 
 const generatePoster = () => {
   const posters = ['made-for-each-other.png', 'popeye-meets-sinbad.png', 'sagebrush-trail.jpg', 'santa-claus-conquers-the-martians.jpg', 'the-dance-of-life.jpg', 'the-great-flamarion.jpg', 'the-man-with-the-golden-arm.jpg'];
@@ -53,14 +51,16 @@ const generateGenres = () => {
   return Array.from(filmGenres);
 };
 
-export const comments = generateComments();
+export const allFilmscomments = generateAllFilmsComments();
 
-export const generateFilm = () => {
+export const generateFilm = (index) => {
   const descriptionMaxSentencesNumber = 5;
   const maxAgeLimit = 18;
+  const id = index;
 
   return {
-    comments: comments.map((comment) => comment.id),
+    id,
+    comments: allFilmscomments[id].map((comment) => comment.id),
     filmInfo: {
       poster: generatePoster(),
       title: generateTitle(),
@@ -79,10 +79,10 @@ export const generateFilm = () => {
       description: generateTextContent(descriptionMaxSentencesNumber)
     },
     userDetails: {
-      isInWatchlist: getRandomInteger(0, 1),
-      isWatched: getRandomInteger(0, 1),
+      isInWatchlist: Boolean(getRandomInteger(0, 1)),
+      isWatched: Boolean(getRandomInteger(0, 1)),
       watchingDate: generateRandomDate(),
-      isFavourite: getRandomInteger(0, 1)
+      isFavourite: Boolean(getRandomInteger(0, 1)),
     }
   };
 };

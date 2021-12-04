@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {Emotions} from '../const.js';
+import {Emotions} from '../consts.js';
+import {createElement} from '../render.js';
 
 const createPopupGenresTemplate = (genres) => (
   `<td class="film-details__term">${genres.length > 1 ? 'Genres':'Genre'}</td>
@@ -27,21 +28,23 @@ const createPopupCommentsTemplate = (comments) => {
 </li>`).join('') : ''}`;
 };
 
-const createPopupEmojiItemTemplate = () => (
-  `${Object.values(Emotions).map((emotion) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
-  <label class="film-details__emoji-label" for="emoji-${emotion}">
-    <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
-  </label>`).join('')}`
+const createPopupEmojiListTemplate = () => (
+  `<div class="film-details__emoji-list">
+    ${Object.values(Emotions).map((emotion) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
+    <label class="film-details__emoji-label" for="emoji-${emotion}">
+      <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
+    </label>`).join('')}
+  </div>`
 );
 
-export const createPopupTemplate = (film, comments) => {
+const createPopupTemplate = (film, comments) => {
   const {filmInfo, userDetails} = film;
   const {poster, title, originalTitle, rating, ageLimit, director, writers, actors, release, duration, genres, description} = filmInfo;
   const {isInWatchlist, isWatched, isFavourite} = userDetails;
 
   const genresTemplate = createPopupGenresTemplate(genres);
   const commentsTemplate = createPopupCommentsTemplate(comments);
-  const emojiItemTemplate = createPopupEmojiItemTemplate();
+  const emojiListTemplate = createPopupEmojiListTemplate();
 
   const formatReleaseDate = () => (dayjs(release.date).format('D MMMM YYYY'));
   const formattedReleaseDate = formatReleaseDate();
@@ -138,12 +141,37 @@ export const createPopupTemplate = (film, comments) => {
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
           </label>
 
-          <div class="film-details__emoji-list">
-            ${emojiItemTemplate}
-          </div>
+          ${emojiListTemplate}
+
         </div>
       </section>
     </div>
   </form>
 </section>`;
 };
+
+export default class PopupView {
+  #element = null;
+  #film = null;
+  #comments = null;
+
+  constructor (film, comments) {
+    this.#film = film;
+    this.#comments = comments;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createPopupTemplate(this.#film, this.#comments);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
