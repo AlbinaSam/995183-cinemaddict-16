@@ -1,4 +1,4 @@
-import {GENRES, ALL_NAMES, COUNTRIES} from '../consts.js';
+import {GENRES, ALL_NAMES, COUNTRIES} from './consts.js';
 import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils.js';
 import {generateAllFilmsComments} from './comments.js';
 
@@ -64,25 +64,25 @@ export const generateFilm = (index) => {
     filmInfo: {
       poster: generatePoster(),
       title: generateTitle(),
-      originalTitle: generateTitle(),
-      rating: generateRating(),
-      ageLimit: getRandomInteger(0, maxAgeLimit),
+      alternativeTitle: generateTitle(),
+      totalRating: generateRating(),
+      ageRating: getRandomInteger(0, maxAgeLimit),
       director: ALL_NAMES[getRandomInteger(0, ALL_NAMES.length - 1)],
       writers: generateNames(),
       actors: generateNames(),
       release: {
         date: generateRandomDate(),
-        country: COUNTRIES[getRandomInteger(0, COUNTRIES.length - 1)]
+        releaseCountry: COUNTRIES[getRandomInteger(0, COUNTRIES.length - 1)]
       },
-      duration: generateDuration(),
-      genres: generateGenres(),
+      runtime: generateDuration(),
+      genre: generateGenres(),
       description: generateTextContent(descriptionMaxSentencesNumber)
     },
     userDetails: {
-      isInWatchlist: Boolean(getRandomInteger(0, 1)),
-      isWatched: Boolean(getRandomInteger(0, 1)),
+      watchlist: Boolean(getRandomInteger(0, 1)),
+      alreadyWatched: Boolean(getRandomInteger(0, 1)),
       watchingDate: generateRandomDate(),
-      isFavourite: Boolean(getRandomInteger(0, 1)),
+      favourite: Boolean(getRandomInteger(0, 1)),
     }
   };
 };

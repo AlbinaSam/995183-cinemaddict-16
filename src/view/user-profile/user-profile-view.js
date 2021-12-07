@@ -1,12 +1,5 @@
-import {createElement} from '../render.js';
-
-const createUserProfileTemplate = (status) => (
-  `<section class="header__profile profile">
-    <p class="profile__rating">${status}</p>
-    <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-  </section>`
-);
-
+import {createUserProfileTemplate} from './user-profile.tpl.js';
+import {createElement} from '../../render.js';
 
 export default class UserProfileView {
   #element = null;
