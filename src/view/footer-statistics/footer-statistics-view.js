@@ -1,8 +1,5 @@
-import {createElement} from '../render.js';
-
-const createTotalFilmNumberTemplate = (filmsNumber) => (
-  `<p>${filmsNumber} movies inside</p>`
-);
+import {createTotalFilmNumberTemplate} from './footer-statistics.tpl.js';
+import {createElement} from '../../render.js';
 
 export default class TotalFilmNumberView {
   #element = null;

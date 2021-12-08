@@ -1,7 +1,7 @@
 import {isBetween} from '../utils.js';
 
 export const generateUserStatus = (films) => {
-  const filmsNumber = films.filter((film) => film.userDetails.isWatched).length;
+  const filmsNumber = films.filter((film) => film.userDetails.alreadyWatched).length;
 
   let status ='';
   if (isBetween(filmsNumber, 1, 10)) {

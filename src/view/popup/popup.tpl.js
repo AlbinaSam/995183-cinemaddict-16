@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import {Emotions} from '../consts.js';
-import {createElement} from '../render.js';
+import {Emotions} from '../../consts.js';
 
 const createPopupGenresTemplate = (genres) => (
   `<td class="film-details__term">${genres.length > 1 ? 'Genres':'Genre'}</td>
@@ -37,12 +36,12 @@ const createPopupEmojiListTemplate = () => (
   </div>`
 );
 
-const createPopupTemplate = (film, comments) => {
+export const createPopupTemplate = (film, comments) => {
   const {filmInfo, userDetails} = film;
-  const {poster, title, originalTitle, rating, ageLimit, director, writers, actors, release, duration, genres, description} = filmInfo;
-  const {isInWatchlist, isWatched, isFavourite} = userDetails;
+  const {poster, title, alternativeTitle, totalRating, ageRating, director, writers, actors, release, runtime, genre, description} = filmInfo;
+  const {watchlist, alreadyWatched, favourite} = userDetails;
 
-  const genresTemplate = createPopupGenresTemplate(genres);
+  const genresTemplate = createPopupGenresTemplate(genre);
   const commentsTemplate = createPopupCommentsTemplate(comments);
   const emojiListTemplate = createPopupEmojiListTemplate();
 
@@ -50,8 +49,8 @@ const createPopupTemplate = (film, comments) => {
   const formattedReleaseDate = formatReleaseDate();
   const formatDuration = () => {
     const minutesInHour = 60;
-    const hours = Math.trunc(duration/minutesInHour);
-    let minutes = duration % minutesInHour;
+    const hours = Math.trunc(runtime/minutesInHour);
+    let minutes = runtime % minutesInHour;
     if (String(minutes).length === 1) {
       minutes = `0${minutes}`;
     }
@@ -70,18 +69,18 @@ const createPopupTemplate = (film, comments) => {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="${poster}" alt="">
 
-          <p class="film-details__age">${ageLimit}+</p>
+          <p class="film-details__age">${ageRating}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${originalTitle}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${rating}</p>
+              <p class="film-details__total-rating">${totalRating}</p>
             </div>
           </div>
 
@@ -108,7 +107,7 @@ const createPopupTemplate = (film, comments) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${release.country}</td>
+              <td class="film-details__cell">${release.releaseCountry}</td>
             </tr>
             <tr class="film-details__row">
               ${genresTemplate}
@@ -120,9 +119,9 @@ const createPopupTemplate = (film, comments) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button ${isInWatchlist ? activeControlItemClassName : ''}" film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button ${isWatched ? activeControlItemClassName : ''}" film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button ${isFavourite ? activeControlItemClassName : ''}" film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button ${watchlist ? activeControlItemClassName : ''}" film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button ${alreadyWatched ? activeControlItemClassName : ''}" film-details__control-button--watched" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button ${favourite ? activeControlItemClassName : ''}" film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
@@ -149,29 +148,3 @@ const createPopupTemplate = (film, comments) => {
   </form>
 </section>`;
 };
-
-export default class PopupView {
-  #element = null;
-  #film = null;
-  #comments = null;
-
-  constructor (film, comments) {
-    this.#film = film;
-    this.#comments = comments;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  get template() {
-    return createPopupTemplate(this.#film, this.#comments);
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
-}

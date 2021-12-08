@@ -1,4 +1,5 @@
-import {Emotions, ALL_NAMES, FILM_COUNT} from '../consts.js';
+import {ALL_NAMES} from './consts.js';
+import {Emotions, FILM_COUNT} from '../consts.js';
 import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils.js';
 
 const MAX_COMMENTS_NUMBER = 5;

@@ -1,8 +1,5 @@
-import {createElement} from '../render.js';
-
-const createShowMoreButtonTemplate = () => (
-  '<button class="films-list__show-more">Show more</button>'
-);
+import {createShowMoreButtonTemplate} from './show-more-button.tpl.js';
+import {createElement} from '../../render.js';
 
 export default class ShowMoreButtonView {
   #element = null;
