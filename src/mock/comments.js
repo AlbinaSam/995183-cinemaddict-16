@@ -1,6 +1,6 @@
 import {ALL_NAMES} from './consts.js';
 import {Emotions, FILM_COUNT} from '../consts.js';
-import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils.js';
+import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils/utils.js';
 
 const MAX_COMMENTS_NUMBER = 5;
 

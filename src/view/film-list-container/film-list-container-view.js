@@ -1,21 +1,9 @@
+import AbstarctView from '../abstract-view.js';
 import {createFilmsListContainerTemplate} from './film-list-container.tpl.js';
-import {createElement} from '../../render.js';
 
-export default class FilmsListContainerView {
-  #element= null;
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+export default class FilmsListContainerView extends AbstarctView {
   get template() {
     return createFilmsListContainerTemplate();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

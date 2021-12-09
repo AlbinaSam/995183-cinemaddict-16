@@ -1,26 +1,15 @@
+import AbstarctView from '../abstract-view.js';
 import {createMainNavigationTemplate} from './main-navigation.tpl.js';
-import {createElement} from '../../render.js';
 
-export default class MainNavigationView {
-  #element = null;
+export default class MainNavigationView extends AbstarctView {
   #filters = null;
 
   constructor (filters) {
+    super();
     this.#filters = filters;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return createMainNavigationTemplate(this.#filters);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

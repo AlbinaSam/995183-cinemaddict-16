@@ -1,5 +1,5 @@
 import {GENRES, ALL_NAMES, COUNTRIES} from './consts.js';
-import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils.js';
+import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils/utils.js';
 import {generateAllFilmsComments} from './comments.js';
 
 const generatePoster = () => {

@@ -26,3 +26,6 @@ export const generateTextContent = (maxSentencesNumber) => {
 };
 
 export const isBetween = (x, min, max) => x >= min && x <= max;
+
+export const isEscapePressed = (evt) => evt.key === 'Esc' || evt.key === 'Escape';
+

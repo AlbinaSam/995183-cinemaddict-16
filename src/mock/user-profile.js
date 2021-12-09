@@ -1,4 +1,4 @@
-import {isBetween} from '../utils.js';
+import {isBetween} from '../utils/utils.js';
 
 export const generateUserStatus = (films) => {
   const filmsNumber = films.filter((film) => film.userDetails.alreadyWatched).length;

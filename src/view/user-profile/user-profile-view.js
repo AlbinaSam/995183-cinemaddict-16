@@ -1,27 +1,15 @@
+import AbstarctView from '../abstract-view.js';
 import {createUserProfileTemplate} from './user-profile.tpl.js';
-import {createElement} from '../../render.js';
 
-export default class UserProfileView {
-  #element = null;
+export default class UserProfileView extends AbstarctView {
   #status = null;
 
   constructor(status) {
+    super();
     this.#status = status;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createUserProfileTemplate(this.#status);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
