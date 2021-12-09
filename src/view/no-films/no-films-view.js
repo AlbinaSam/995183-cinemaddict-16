@@ -1,26 +1,15 @@
+import AbstarctView from '../abstract-view.js';
 import {createNoFilmsTemplate} from './no-films.tpl.js';
-import {createElement} from '../../render.js';
 
-export default class NoFilmsView {
-  #element = null;
+export default class NoFilmsView extends AbstarctView {
   #filterName = null;
 
   constructor (filterName) {
+    super();
     this.#filterName = filterName;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template () {
     return createNoFilmsTemplate(this.#filterName);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

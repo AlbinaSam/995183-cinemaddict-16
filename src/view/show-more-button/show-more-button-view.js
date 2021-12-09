@@ -1,21 +1,18 @@
+import AbstarctView from '../abstract-view.js';
 import {createShowMoreButtonTemplate} from './show-more-button.tpl.js';
-import {createElement} from '../../render.js';
 
-export default class ShowMoreButtonView {
-  #element = null;
-
-  get element () {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+export default class ShowMoreButtonView extends AbstarctView {
   get template () {
     return createShowMoreButtonTemplate();
   }
 
-  removeElement () {
-    this.#element = null;
+  setShowMoreButtonClickHandler = (callback) => {
+    this._callback.showMoreClick = callback;
+    this.element.addEventListener('click', this.#showMoreButtonClickHandler);
+  }
+
+  #showMoreButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.showMoreClick();
   }
 }

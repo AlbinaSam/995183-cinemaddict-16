@@ -1,22 +1,8 @@
+import AbstarctView from '../abstract-view.js';
 import {createSortingTemplate} from './sorting.tpl.js';
-import {createElement} from '../../render.js';
 
-export default class SortingView {
-  #element = null;
-
-  get element () {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+export default class SortingView extends AbstarctView {
   get template () {
     return createSortingTemplate();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
