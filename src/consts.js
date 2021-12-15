@@ -5,6 +5,12 @@ export const Emotions = {
   ANGRY: 'angry'
 };
 
+export const Statuses = {
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  MOVIEBUFF: 'Movie Buff'
+};
+
 export const EXTRA_FILM_COUNT = 2;
 export const FILM_COUNT = 26;
 export const FILM_COUNT_PER_STEP = 5;

@@ -1,7 +1,7 @@
-import AbstarctView from '../abstract-view.js';
+import AbstractView from '../abstract-view.js';
 import {createUserProfileTemplate} from './user-profile.tpl.js';
 
-export default class UserProfileView extends AbstarctView {
+export default class UserProfileView extends AbstractView {
   #status = null;
 
   constructor(status) {

@@ -1,7 +1,7 @@
-import AbstarctView from '../abstract-view.js';
+import AbstractView from '../abstract-view.js';
 import {createMainNavigationTemplate} from './main-navigation.tpl.js';
 
-export default class MainNavigationView extends AbstarctView {
+export default class MainNavigationView extends AbstractView {
   #filters = null;
 
   constructor (filters) {

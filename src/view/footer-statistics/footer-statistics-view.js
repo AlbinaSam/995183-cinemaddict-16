@@ -1,7 +1,7 @@
-import AbstarctView from '../abstract-view.js';
+import AbstractView from '../abstract-view.js';
 import {createTotalFilmNumberTemplate} from './footer-statistics.tpl.js';
 
-export default class TotalFilmNumberView extends AbstarctView {
+export default class TotalFilmNumberView extends AbstractView {
   #filmsNumber = null;
 
   constructor(filmsNumber) {

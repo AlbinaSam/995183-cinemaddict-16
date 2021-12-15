@@ -1,7 +1,7 @@
-import AbstarctView from '../abstract-view.js';
+import AbstractView from '../abstract-view.js';
 import {createNoFilmsTemplate} from './no-films.tpl.js';
 
-export default class NoFilmsView extends AbstarctView {
+export default class NoFilmsView extends AbstractView {
   #filterName = null;
 
   constructor (filterName) {
