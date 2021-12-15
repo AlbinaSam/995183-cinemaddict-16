@@ -6,7 +6,7 @@ import NoFilmsView from '../view/no-films/no-films-view';
 import FilmCardView from '../view/film-card/film-card-view';
 import ShowMoreButtonView from '../view/show-more-button/show-more-button-view';
 import PopupView from '../view/popup/popup-view';
-import {EXTRA_FILM_COUNT, FILM_COUNT_PER_STEP, DEFAULT_FILTER_NAME} from '../consts';
+import {FILM_COUNT_PER_STEP, DEFAULT_FILTER_NAME} from '../consts';
 import {RenderPosition, render, remove, replace} from '../utils/render';
 import {isEscapePressed, updateItem} from '../utils/utils';
 
