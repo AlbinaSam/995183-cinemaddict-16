@@ -1,6 +1,6 @@
 import {createElement} from '../utils/render';
 
-export default class AbstarctView {
+export default class AbstractView {
   #element = null;
   _callback = {};
 

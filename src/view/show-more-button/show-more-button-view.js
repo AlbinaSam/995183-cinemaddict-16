@@ -1,7 +1,7 @@
-import AbstarctView from '../abstract-view.js';
+import AbstractView from '../abstract-view.js';
 import {createShowMoreButtonTemplate} from './show-more-button.tpl.js';
 
-export default class ShowMoreButtonView extends AbstarctView {
+export default class ShowMoreButtonView extends AbstractView {
   get template () {
     return createShowMoreButtonTemplate();
   }

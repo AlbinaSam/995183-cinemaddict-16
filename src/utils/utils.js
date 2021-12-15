@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {Statuses} from '../consts';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -29,3 +30,31 @@ export const isBetween = (x, min, max) => x >= min && x <= max;
 
 export const isEscapePressed = (evt) => evt.key === 'Esc' || evt.key === 'Escape';
 
+export const generateUserStatus = (films) => {
+  const filmsNumber = films.filter((film) => film.userDetails.alreadyWatched).length;
+
+  let status ='';
+  if (isBetween(filmsNumber, 1, 10)) {
+    status = Statuses.NOVICE;
+  } else if (isBetween(filmsNumber, 11, 20)) {
+    status = Statuses.FAN;
+  } else if (filmsNumber >= 21) {
+    status = Statuses.MOVIEBUFF;
+  }
+
+  return status;
+};
+
+export const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};

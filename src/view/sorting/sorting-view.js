@@ -1,7 +1,7 @@
-import AbstarctView from '../abstract-view.js';
+import AbstractView from '../abstract-view.js';
 import {createSortingTemplate} from './sorting.tpl.js';
 
-export default class SortingView extends AbstarctView {
+export default class SortingView extends AbstractView {
   get template () {
     return createSortingTemplate();
   }
