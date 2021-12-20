@@ -18,9 +18,9 @@ const generateRating = () =>  {
   const maxRatingNumber = 10;
   const mainValue = getRandomInteger(1, maxRatingNumber);
   if (mainValue === maxRatingNumber) {
-    return `${mainValue}.0`;
+    return Number(`${mainValue}.0`);
   } else {
-    return `${mainValue}.${getRandomInteger(0, 9)}`;
+    return Number(`${mainValue}.${getRandomInteger(0, 9)}`);
   }
 };
 

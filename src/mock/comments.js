@@ -1,5 +1,5 @@
 import {ALL_NAMES} from './consts.js';
-import {Emotions, FILM_COUNT} from '../consts.js';
+import {Emotions, FilmAmounts} from '../consts.js';
 import {getRandomInteger, generateRandomDate, generateTextContent} from '../utils/utils.js';
 
 const MAX_COMMENTS_NUMBER = 5;
@@ -22,4 +22,4 @@ const generateComment = () => {
 
 const generateCommentsForFilm = () => Array.from({length: getRandomInteger(0, MAX_COMMENTS_NUMBER)}, generateComment);
 
-export const generateAllFilmsComments = () => Array.from({length: FILM_COUNT}, generateCommentsForFilm);
+export const generateAllFilmsComments = () => Array.from({length: FilmAmounts.FILM_AMOUNT}, generateCommentsForFilm);

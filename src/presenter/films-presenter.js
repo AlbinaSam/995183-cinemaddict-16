@@ -6,33 +6,38 @@ import NoFilmsView from '../view/no-films/no-films-view';
 import FilmCardView from '../view/film-card/film-card-view';
 import ShowMoreButtonView from '../view/show-more-button/show-more-button-view';
 import PopupView from '../view/popup/popup-view';
-import {FILM_COUNT_PER_STEP, DEFAULT_FILTER_NAME} from '../consts';
+import {FilmAmounts, DEFAULT_FILTER_NAME, SortType} from '../consts';
 import {RenderPosition, render, remove, replace} from '../utils/render';
 import {isEscapePressed, updateItem} from '../utils/utils';
-
+import {sortByDate, sortByRating} from '../utils/sorting';
 export default class FilmsPresenter {
   #filmsContainer = null;
   #userProfileStatus = null;
   #filmsComponent = null;
   #filmsListContainerComponent = null;
 
-  #sortingComponent = new SortingView();
+  #currentSortType = SortType.DEFAULT;
+
+  #sortingComponent = null;
   #noFilmsComponent = new NoFilmsView(DEFAULT_FILTER_NAME);
   #showMoreButtonComponent = new ShowMoreButtonView();
 
-  #renderedFilmCount = FILM_COUNT_PER_STEP;
+  #renderedFilmCount = FilmAmounts.FILM_AMOUNT_PER_STEP;
 
   #films = [];
   #allFilmsComments = [];
   #filmsComponents = new Map();
   #popupComponent = null;
 
+  #sourcedFilms = [];
+
   constructor (filmsContainer) {
     this.#filmsContainer = filmsContainer;
   }
 
   init = (films, allFilmsComments, userProfileStatus) => {
-    this.#films = films;
+    this.#films = [...films];
+    this.#sourcedFilms = [...films];
     this.#allFilmsComments = allFilmsComments;
     this.#userProfileStatus = userProfileStatus;
     this.#filmsComponent = new FilmsView(this.#films);
@@ -46,8 +51,45 @@ export default class FilmsPresenter {
     render(headerElement, userProfileComponent, RenderPosition.BEFOREEND);
   }
 
+  #sortFilms = (sortType) => {
+    switch(sortType) {
+      case SortType.DATE:
+        this.#films.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this.#films.sort(sortByRating);
+        break;
+      default:
+        this.#films = this.#sourcedFilms;
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortFilms(sortType);
+    this.#clearFilmsList();
+    remove(this.#sortingComponent);
+    this.#renderSort(this.#currentSortType);
+    this.#renderFilmsList();
+  }
+
   #renderSort = () => {
+    this.#sortingComponent = new SortingView(this.#currentSortType);
     render(this.#filmsContainer, this.#sortingComponent, RenderPosition.AFTEREND);
+    this.#sortingComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  }
+
+  #clearFilmsList = () => {
+    this.#filmsComponents.forEach((component) => remove(component));
+    this.#filmsComponents.clear();
+    this.#renderedFilmCount = FilmAmounts.FILM_AMOUNT_PER_STEP;
+    remove(this.#showMoreButtonComponent);
   }
 
   #renderFilms = () => {
@@ -70,9 +112,9 @@ export default class FilmsPresenter {
   }
 
   #renderFilmsList = () => {
-    this.#renderNeededFilmsAmount(0, Math.min(this.#films.length, FILM_COUNT_PER_STEP));
+    this.#renderNeededFilmsAmount(0, Math.min(this.#films.length, FilmAmounts.FILM_AMOUNT_PER_STEP));
 
-    if (this.#films.length > FILM_COUNT_PER_STEP) {
+    if (this.#films.length > FilmAmounts.FILM_AMOUNT_PER_STEP) {
       this.#renderShowMoreButton();
     }
   }
@@ -85,36 +127,41 @@ export default class FilmsPresenter {
 
   #updateFilm = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
+    this.#sourcedFilms = updateItem(this.#films, updatedFilm);
     this.#renderFilm(updatedFilm, this.#allFilmsComments[updatedFilm.id]);
+  }
+
+  #closePopup = () => {
+
+    if (this.#popupComponent === null) {
+      return;
+    }
+
+    const body = document.querySelector('body');
+    body.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+
+    remove(this.#popupComponent);
+    this.#popupComponent = null;
+  }
+
+  #escKeyDownHandler = (evt) => {
+    if (isEscapePressed (evt)) {
+      evt.preventDefault();
+      this.#closePopup();
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
+    }
   }
 
   #renderPopup = (film, comments) => {
     const body = document.querySelector('body');
     const footerElement = document.querySelector('.footer');
 
-    const prevPopupComponent = this.#popupComponent;
     this.#popupComponent = new PopupView(film, comments);
-
-    const closePopup = (popupComponent) => {
-      remove(popupComponent);
-      this.#popupComponent = null;
-      body.classList.remove('hide-overflow');
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (isEscapePressed (evt)) {
-        evt.preventDefault();
-        closePopup(this.#popupComponent);
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    document.addEventListener('keydown', onEscKeyDown);
 
     const closeButton = this.#popupComponent.element.querySelector('.film-details__close-btn');
     closeButton.addEventListener('click', () => {
-      closePopup(this.#popupComponent);
-      document.removeEventListener('keydown', onEscKeyDown);
+      this.#closePopup();
     });
 
     const handlePopupAddToWatchList = () => {
@@ -135,7 +182,7 @@ export default class FilmsPresenter {
 
     render(footerElement, this.#popupComponent, RenderPosition.AFTEREND);
     body.classList.add('hide-overflow');
-    remove(prevPopupComponent);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #renderFilm = (film, comments) => {
@@ -146,6 +193,7 @@ export default class FilmsPresenter {
     this.#filmsComponents.set(film.id, filmCardComponent);
 
     const handleFilmCardClick = () => {
+      this.#closePopup();
       this.#renderPopup(film, comments);
     };
 
@@ -173,6 +221,7 @@ export default class FilmsPresenter {
       remove(prevFilmComponent);
 
       if (!(this.#popupComponent === null)) {
+        this.#closePopup();
         this.#renderPopup(film, comments);
       }
     }
@@ -184,9 +233,9 @@ export default class FilmsPresenter {
   }
 
   #handleShowMoreButtonClick = () => {
-    this.#renderNeededFilmsAmount(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP);
+    this.#renderNeededFilmsAmount(this.#renderedFilmCount, this.#renderedFilmCount + FilmAmounts.FILM_AMOUNT_PER_STEP);
 
-    this.#renderedFilmCount += FILM_COUNT_PER_STEP;
+    this.#renderedFilmCount += FilmAmounts.FILM_AMOUNT_PER_STEP;
 
     if (this.#renderedFilmCount >= this.#films.length) {
       remove(this.#showMoreButtonComponent);

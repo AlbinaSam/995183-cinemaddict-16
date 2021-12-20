@@ -11,9 +11,11 @@ export const Statuses = {
   MOVIEBUFF: 'Movie Buff'
 };
 
-export const EXTRA_FILM_COUNT = 2;
-export const FILM_COUNT = 26;
-export const FILM_COUNT_PER_STEP = 5;
+export const FilmAmounts = {
+  EXTRA_FILM_AMOUNT: 2,
+  FILM_AMOUNT: 26,
+  FILM_AMOUNT_PER_STEP: 5
+};
 
 export const DEFAULT_FILTER_NAME = 'all';
 
@@ -22,4 +24,10 @@ export const NoFilmsViewTextContents = {
   watchlist: 'There are no movies to watch now',
   history: 'There are no watched movies now',
   favorites:'There are no favorite movies now'
+};
+
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating'
 };
