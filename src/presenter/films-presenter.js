@@ -127,7 +127,7 @@ export default class FilmsPresenter {
 
   #updateFilm = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
-    this.#sourcedFilms = updateItem(this.#films, updatedFilm);
+    this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
     this.#renderFilm(updatedFilm, this.#allFilmsComments[updatedFilm.id]);
   }
 
@@ -149,7 +149,6 @@ export default class FilmsPresenter {
     if (isEscapePressed (evt)) {
       evt.preventDefault();
       this.#closePopup();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   }
 
@@ -159,26 +158,38 @@ export default class FilmsPresenter {
 
     this.#popupComponent = new PopupView(film, comments);
 
-    const closeButton = this.#popupComponent.element.querySelector('.film-details__close-btn');
-    closeButton.addEventListener('click', () => {
-      this.#closePopup();
-    });
-
     const handlePopupAddToWatchList = () => {
-      this.#updateFilm({...film,  userDetails: {...film.userDetails, watchlist: !film.userDetails.watchlist}});
+      const latestFilm = this.#films.find((item) => item.id === film.id);
+
+      this.#updateFilm({...latestFilm,  userDetails: {...latestFilm.userDetails, watchlist: !latestFilm.userDetails.watchlist}});
+
+      this.#popupComponent.updateData({userDetails: {...latestFilm.userDetails, watchlist: !latestFilm.userDetails.watchlist}, scrollPosition: this.#popupComponent.element.scrollTop});
     };
 
     const handlePopupAlreadyWatchedClick = () => {
-      this.#updateFilm({...film,  userDetails: {...film.userDetails, alreadyWatched: !film.userDetails.alreadyWatched}});
+      const latestFilm = this.#films.find((item) => item.id === film.id);
+
+      this.#updateFilm({...latestFilm,  userDetails: {...latestFilm.userDetails, alreadyWatched: !latestFilm.userDetails.alreadyWatched}});
+
+      this.#popupComponent.updateData({userDetails: {...latestFilm.userDetails, alreadyWatched: !latestFilm.userDetails.alreadyWatched}, scrollPosition: this.#popupComponent.element.scrollTop});
     };
 
     const handlePopupAddToFavoriteClick = () => {
-      this.#updateFilm({...film,  userDetails: {...film.userDetails, favourite: !film.userDetails.favourite}});
+      const latestFilm = this.#films.find((item) => item.id === film.id);
+
+      this.#updateFilm({...latestFilm,  userDetails: {...latestFilm.userDetails, favourite: !latestFilm.userDetails.favourite}});
+
+      this.#popupComponent.updateData({userDetails: {...latestFilm.userDetails, favourite: !latestFilm.userDetails.favourite}, scrollPosition: this.#popupComponent.element.scrollTop});
+    };
+
+    const handleCloseButtonClick = () => {
+      this.#closePopup();
     };
 
     this.#popupComponent.setAddToWatchClickHandler(handlePopupAddToWatchList);
     this.#popupComponent.setAlreadyWatchedClickHandler(handlePopupAlreadyWatchedClick);
     this.#popupComponent.setAddToFavoriteClickHandler(handlePopupAddToFavoriteClick);
+    this.#popupComponent.setCloseButtonClickHandler(handleCloseButtonClick);
 
     render(footerElement, this.#popupComponent, RenderPosition.AFTEREND);
     body.classList.add('hide-overflow');
@@ -219,11 +230,6 @@ export default class FilmsPresenter {
     } else {
       replace(filmCardComponent, prevFilmComponent);
       remove(prevFilmComponent);
-
-      if (!(this.#popupComponent === null)) {
-        this.#closePopup();
-        this.#renderPopup(film, comments);
-      }
     }
   }
 
