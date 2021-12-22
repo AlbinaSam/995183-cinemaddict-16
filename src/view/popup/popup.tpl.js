@@ -37,7 +37,7 @@ const createPopupEmojiListTemplate = () => (
 );
 
 export const createPopupTemplate = (film, comments) => {
-  const {filmInfo, userDetails} = film;
+  const {filmInfo, userDetails, newCommentEmoji, newCommentText} = film;
   const {poster, title, alternativeTitle, totalRating, ageRating, director, writers, actors, release, runtime, genre, description} = filmInfo;
   const {watchlist, alreadyWatched, favourite} = userDetails;
 
@@ -134,10 +134,12 @@ export const createPopupTemplate = (film, comments) => {
         </ul>
 
         <div class="film-details__new-comment">
-          <div class="film-details__add-emoji-label"></div>
+          <div class="film-details__add-emoji-label">
+            ${newCommentEmoji ? `<img src="images/emoji/${newCommentEmoji}.png" width="55" height="55" alt="emoji-${newCommentEmoji}">` : ''}
+          </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newCommentText}</textarea>
           </label>
 
           ${emojiListTemplate}
