@@ -57,10 +57,6 @@ export default class PopupView extends SmartView {
   }
 
   #emojiClickHandler = (evt) => {
-    if (evt.target.tagName !== 'INPUT') {
-      return;
-    }
-
     this.updateData({newCommentEmoji: evt.target.value, scrollPosition: this.element.scrollTop});
   }
 
@@ -70,7 +66,7 @@ export default class PopupView extends SmartView {
   }
 
   #setInnerHandlers = () => {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiClickHandler);
+    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiClickHandler);
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler);
   }
 

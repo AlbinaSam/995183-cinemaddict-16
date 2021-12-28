@@ -31,15 +31,16 @@ export default class FilmsPresenter {
 
   #sourcedFilms = [];
 
-  constructor (filmsContainer) {
+  constructor (filmsContainer, films, allFilmsComments, userProfileStatus) {
     this.#filmsContainer = filmsContainer;
-  }
-
-  init = (films, allFilmsComments, userProfileStatus) => {
     this.#films = [...films];
     this.#sourcedFilms = [...films];
     this.#allFilmsComments = allFilmsComments;
     this.#userProfileStatus = userProfileStatus;
+    this.#init();
+  }
+
+  #init = () => {
     this.#filmsComponent = new FilmsView(this.#films);
     render(this.#filmsContainer, this.#filmsComponent, RenderPosition.AFTEREND);
     this.#renderFilms(this.#filmsListContainerComponent);
