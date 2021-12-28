@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 import {Emotions} from '../../consts.js';
 
 const createPopupGenresTemplate = (genres) => (
@@ -45,17 +47,16 @@ export const createPopupTemplate = (film, comments) => {
   const commentsTemplate = createPopupCommentsTemplate(comments);
   const emojiListTemplate = createPopupEmojiListTemplate();
 
-  const formatReleaseDate = () => (dayjs(release.date).format('D MMMM YYYY'));
+  const formatReleaseDate = () => (dayjs(release.date).format('DD MMMM YYYY'));
   const formattedReleaseDate = formatReleaseDate();
+
   const formatDuration = () => {
-    const minutesInHour = 60;
-    const hours = Math.trunc(runtime/minutesInHour);
-    let minutes = runtime % minutesInHour;
-    if (String(minutes).length === 1) {
-      minutes = `0${minutes}`;
-    }
+    const filmDuration = dayjs.duration(runtime, 'm');
+    const hours = filmDuration.hours();
+    const minutes = filmDuration.minutes();
     return `${hours}h ${minutes}m`;
   };
+
   const formattedDuration = formatDuration();
   const activeControlItemClassName = 'film-details__control-button--active';
 

@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 export const createFilmCardTemplate = (film, comments) => {
   const {filmInfo, userDetails} = film;
@@ -6,12 +8,9 @@ export const createFilmCardTemplate = (film, comments) => {
   const {watchlist, alreadyWatched, favourite} = userDetails;
 
   const formatDuration = () => {
-    const minutesInHour = 60;
-    const hours = Math.trunc(runtime/minutesInHour);
-    let minutes = runtime % minutesInHour;
-    if (String(minutes).length === 1) {
-      minutes = `0${minutes}`;
-    }
+    const filmDuration = dayjs.duration(runtime, 'm');
+    const hours = filmDuration.hours();
+    const minutes = filmDuration.minutes();
     return `${hours}h ${minutes}m`;
   };
 

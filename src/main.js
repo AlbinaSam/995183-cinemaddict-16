@@ -18,7 +18,7 @@ const footerElement = document.querySelector('.footer');
 const mainNavigationComponent = new MainNavigationView(filters);
 render(mainElement, mainNavigationComponent, RenderPosition.AFTERBEGIN);
 
-new FilmsPresenter(mainNavigationComponent).init(films, allFilmscomments, userProfileStatus);
+new FilmsPresenter(mainNavigationComponent, films, allFilmscomments, userProfileStatus);
 const footerStatisticsElement = footerElement.querySelector('.footer__statistics');
 
 render(footerStatisticsElement, new TotalFilmNumberView(films.length), RenderPosition.AFTERBEGIN);
