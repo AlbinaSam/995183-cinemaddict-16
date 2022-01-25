@@ -1,3 +1,4 @@
+import he from 'he';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -11,27 +12,28 @@ const createPopupGenresTemplate = (genres) => (
   </tr>`
 );
 
-const createPopupCommentsTemplate = (comments) => {
+const createPopupCommentsTemplate = (comments, isDeleting, deletingCommentId) => {
   const formatCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:MM');
 
-  return `${comments.length > 0 ? comments.map((comment) => `<li class="film-details__comment">
+  return `${comments.length > 0 ? comments.map((comment) => `<li class="film-details__comment" data-comment-id="${comment.id}">
   <span class="film-details__comment-emoji">
-    <img src="${comment.emoji}" width="55" height="55" alt="emoji-smile">
+    <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
   </span>
   <div>
-    <p class="film-details__comment-text">${comment.message}</p>
+  <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
     <p class="film-details__comment-info">
-      <span class="film-details__comment-author">${comment.authorName}</span>
+      <span class="film-details__comment-author">${comment.author}</span>
       <span class="film-details__comment-day">${formatCommentDate(comment.date)}</span>
-      <button class="film-details__comment-delete">Delete</button>
+
+      <button type="button" class="film-details__comment-delete" ${isDeleting ? 'disabled' : ''}>${isDeleting && (comment.id === deletingCommentId) ? 'Deleting...' : 'Delete'}</button>
     </p>
   </div>
 </li>`).join('') : ''}`;
 };
 
-const createPopupEmojiListTemplate = () => (
+const createPopupEmojiListTemplate = (isSaving) => (
   `<div class="film-details__emoji-list">
-    ${Object.values(Emotions).map((emotion) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
+    ${Object.values(Emotions).map((emotion) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}" ${isSaving ? 'disabled' : ''}>
     <label class="film-details__emoji-label" for="emoji-${emotion}">
       <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
     </label>`).join('')}
@@ -39,13 +41,13 @@ const createPopupEmojiListTemplate = () => (
 );
 
 export const createPopupTemplate = (film, comments) => {
-  const {filmInfo, userDetails, newCommentEmoji, newCommentText} = film;
+  const {filmInfo, userDetails, localComment, isSaving, isDeleting, deletingCommentId} = film;
   const {poster, title, alternativeTitle, totalRating, ageRating, director, writers, actors, release, runtime, genre, description} = filmInfo;
   const {watchlist, alreadyWatched, favourite} = userDetails;
 
   const genresTemplate = createPopupGenresTemplate(genre);
-  const commentsTemplate = createPopupCommentsTemplate(comments);
-  const emojiListTemplate = createPopupEmojiListTemplate();
+  const commentsTemplate = createPopupCommentsTemplate(comments, isDeleting, deletingCommentId);
+  const emojiListTemplate = createPopupEmojiListTemplate(isSaving);
 
   const formatReleaseDate = () => (dayjs(release.date).format('DD MMMM YYYY'));
   const formattedReleaseDate = formatReleaseDate();
@@ -136,11 +138,11 @@ export const createPopupTemplate = (film, comments) => {
 
         <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label">
-            ${newCommentEmoji ? `<img src="images/emoji/${newCommentEmoji}.png" width="55" height="55" alt="emoji-${newCommentEmoji}">` : ''}
+            ${localComment.emotion ? `<img src="images/emoji/${localComment.emotion}.png" width="55" height="55" alt="emoji-${localComment.emotion}">` : ''}
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newCommentText}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isSaving ? 'disabled' : ''}>${localComment.comment}</textarea>
           </label>
 
           ${emojiListTemplate}

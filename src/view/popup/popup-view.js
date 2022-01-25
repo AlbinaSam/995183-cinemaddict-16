@@ -8,12 +8,43 @@ export default class PopupView extends SmartView {
     super();
     this._data = PopupView.parseFilmToData(film);
     this.#comments = comments;
-
     this.#setInnerHandlers();
   }
 
   get template() {
     return createPopupTemplate(this._data, this.#comments);
+  }
+
+  updateComments = (updatedComments) => {
+    this.#comments = updatedComments;
+  }
+
+  setCommentSubmitHandler = (callback) => {
+    this._callback.submitComment = callback;
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#submitHandler);
+  }
+
+  #submitHandler = (evt) => {
+    if (evt.key === 'Enter' && (evt.ctrlKey || evt.metaKey)) {
+      evt.preventDefault();
+
+      this._callback.submitComment(this._data.localComment);
+    }
+  };
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteComment = callback;
+    this.element.querySelector('.film-details__comments-list').addEventListener('click', this.#deleteClickHandler);
+  }
+
+  #deleteClickHandler = (evt) => {
+
+    if (!evt.target.classList.contains('film-details__comment-delete')) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.deleteComment(evt.target.closest('.film-details__comment').dataset.commentId);
   }
 
   setAddToWatchClickHandler = (callback) => {
@@ -57,12 +88,12 @@ export default class PopupView extends SmartView {
   }
 
   #emojiClickHandler = (evt) => {
-    this.updateData({newCommentEmoji: evt.target.value, scrollPosition: this.element.scrollTop});
+    this.updateData({localComment: {...this._data.localComment, emotion: evt.target.value}, scrollPosition: this.element.scrollTop});
   }
 
   #commentInputHandler = (evt) => {
     evt.preventDefault();
-    this.updateData({newCommentText: evt.target.value}, true);
+    this.updateData({localComment: {...this._data.localComment, comment: evt.target.value}}, true);
   }
 
   #setInnerHandlers = () => {
@@ -76,21 +107,30 @@ export default class PopupView extends SmartView {
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedPopup);
     this.setAddToFavoriteClickHandler(this._callback.addToFavoritePopup);
     this.setCloseButtonClickHandler(this._callback.closePopup);
+    this.setDeleteClickHandler(this._callback.deleteComment);
+    this.setCommentSubmitHandler(this._callback.submitComment);
   }
 
   static parseFilmToData = (film) => ({
     ...film,
-    newCommentEmoji: '',
-    newCommentText: '',
+    localComment: {
+      comment: '',
+      emotion: '',
+    },
     scrollPosition: '',
+    isSaving: false,
+    isDeleting: false,
+    deletingCommentId: ''
   });
 
-  static parseDataToFilm = (data) => {
-    const film = {...data};
-    delete film.newCommentEmoji;
-    delete film.newCommentText;
-    delete film.scrollPosition;
+  // static parseDataToFilm = (data) => {
+  //   const film = {...data};
+  //   delete film.localComment;
+  //   delete film.scrollPosition;
+  //   delete film.isSaving;
+  //   delete film.isDeleting;
+  //   delete film.deletingCommentId;
 
-    return film;
-  }
+  //   return film;
+  // }
 }
