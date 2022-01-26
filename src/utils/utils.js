@@ -1,30 +1,4 @@
-import dayjs from 'dayjs';
 import {Statuses} from '../consts';
-
-export const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-export const generateRandomDate = () => {
-  const maxDaysGap = 2000;
-  const daysGap = getRandomInteger(-maxDaysGap, 0);
-  return dayjs().add(daysGap, 'day').toDate();
-};
-
-export const generateTextContent = (maxSentencesNumber) => {
-  let text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
-
-  text = text.slice(0, -1).split('. ');
-  const textContent = [];
-  const randomSentencesNumber = getRandomInteger(1, maxSentencesNumber);
-  for(let i = 0; i < randomSentencesNumber; i++) {
-    textContent.push(text[getRandomInteger(0, text.length - 1)]);
-  }
-  return `${textContent.join('. ')}.`;
-};
 
 export const isBetween = (x, min, max) => x >= min && x <= max;
 
@@ -57,4 +31,33 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
+};
+
+export const adaptFilmToClient = (film) => {
+  const adaptedFilm = { ...film,
+    filmInfo: {...film.film_info,
+      ageRating: film.film_info.age_rating,
+      alternativeTitle: film.film_info.alternative_title,
+      totalRating: film.film_info.total_rating,
+      release: {...film.film_info.release,
+        date: new Date(film.film_info.release.date),
+        releaseCountry: film.film_info.release.release_country
+      }
+    },
+    userDetails: {...film.user_details,
+      alreadyWatched: film.user_details.already_watched,
+      watchingDate: new Date(film.user_details.watching_date)
+    }
+  };
+
+  delete adaptedFilm.film_info;
+  delete adaptedFilm.filmInfo.age_rating;
+  delete adaptedFilm.filmInfo.alternative_title;
+  delete adaptedFilm.filmInfo.total_rating;
+  delete adaptedFilm.filmInfo.release.release_country;
+  delete adaptedFilm.user_details;
+  delete adaptedFilm.userDetails.already_watched;
+  delete adaptedFilm.userDetails.watching_date;
+
+  return adaptedFilm;
 };

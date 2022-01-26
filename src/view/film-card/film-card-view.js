@@ -3,16 +3,14 @@ import {createFilmCardTemplate} from './film-card.tpl.js';
 
 export default class FilmCardView extends AbstractView {
   #film = null;
-  #comments = null;
 
-  constructor(film, comments) {
+  constructor(film) {
     super();
     this.#film = film;
-    this.#comments = comments;
   }
 
   get template() {
-    return createFilmCardTemplate(this.#film, this.#comments);
+    return createFilmCardTemplate(this.#film);
   }
 
   setFilmCardClickHandler = (callback) => {

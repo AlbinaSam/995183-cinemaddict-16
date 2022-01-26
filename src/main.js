@@ -1,24 +1,66 @@
 import MainNavigationView from './view/main-navigation/main-navigation-view';
 import TotalFilmNumberView from './view/footer-statistics/footer-statistics-view';
-import {RenderPosition, render} from './utils/render';
-import {generateFilm, allFilmscomments} from './mock/film';
-import {generateFilter} from './mock/filter';
-import {FilmAmounts} from './consts';
+import StatisticsView from './view/statistics/statistics-view';
+
+import FilmsModel from './model/films-model';
+import CommentsModel from './model/comments-model';
+import FilterModel from './model/filter-model';
+
 import FilmsPresenter from './presenter/films-presenter';
-import {generateUserStatus} from './utils/utils';
+import FilterPresenter from './presenter/filter-presenter';
 
-const films = new Array(FilmAmounts.FILM_AMOUNT).fill().map((i, idx) => generateFilm(idx));
+import {RenderPosition, render, remove} from './utils/render';
+import {STATISTICS_LINK} from './consts';
 
-const filters = generateFilter(films);
-const userProfileStatus = generateUserStatus(films);
+import ApiService from './api-service';
+
+const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
+const AUTHORIZATION = 'Basic h58vv5we5cmf09f';
+
+const filmsModel = new FilmsModel(new ApiService(END_POINT, AUTHORIZATION));
+
+const commentsModel = new CommentsModel(new ApiService(END_POINT, AUTHORIZATION), filmsModel);
+
+const filterModel = new FilterModel();
 
 const mainElement = document.querySelector('.main');
-const footerElement = document.querySelector('.footer');
 
-const mainNavigationComponent = new MainNavigationView(filters);
-render(mainElement, mainNavigationComponent, RenderPosition.AFTERBEGIN);
+const mainNavigationComponent = new MainNavigationView();
 
-new FilmsPresenter(mainNavigationComponent, films, allFilmscomments, userProfileStatus);
-const footerStatisticsElement = footerElement.querySelector('.footer__statistics');
+new FilterPresenter(mainNavigationComponent, filterModel, filmsModel);
 
-render(footerStatisticsElement, new TotalFilmNumberView(films.length), RenderPosition.AFTERBEGIN);
+const filmsPresenter = new FilmsPresenter(mainElement, filmsModel, commentsModel, filterModel);
+filmsPresenter.init();
+
+let statisticsComponent = null;
+
+const handleNavItemClick = (navItem) => {
+  if (navItem === STATISTICS_LINK) {
+
+    filmsPresenter.destroy();
+
+    mainNavigationComponent.setActiveClass();
+
+    statisticsComponent = new StatisticsView(filmsModel.films);
+
+    render(mainNavigationComponent, statisticsComponent, RenderPosition.AFTEREND);
+
+  } else if (statisticsComponent !== null) {
+
+    remove(statisticsComponent);
+
+    statisticsComponent = null;
+
+    mainNavigationComponent.removeActiveClass();
+
+    filmsPresenter.init();
+  }
+};
+
+filmsModel.init().finally(() => {
+  render(mainElement, mainNavigationComponent, RenderPosition.AFTERBEGIN);
+  mainNavigationComponent.setNavClickHandler(handleNavItemClick);
+
+  const footerStatisticsElement = document.querySelector('.footer__statistics');
+  render(footerStatisticsElement, new TotalFilmNumberView(filmsModel.films.length), RenderPosition.AFTERBEGIN);
+});

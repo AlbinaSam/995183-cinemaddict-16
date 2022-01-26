@@ -1,18 +1,5 @@
-const createFilterItemTemplate = (filter, isActive) => {
-  const {id, name, number} = filter;
-  return `<a href="#${id}" class="main-navigation__item ${isActive ? 'main-navigation__item--active' : ''}">${name}${number !== 0 ? `<span class="main-navigation__item-count">${number}</span>` : ''}
-  </a>`;
-};
-
-export const createMainNavigationTemplate = (filters) => {
-
-  const filterItemsTemplate = filters.map((filter, index) => createFilterItemTemplate(filter, index === 0)
-  ).join('');
-
-  return `<nav class="main-navigation">
-    <div class="main-navigation__items">
-      ${filterItemsTemplate}
-    </div>
+export const createMainNavigationTemplate = () => (
+  `<nav class="main-navigation">
     <a href="#stats" class="main-navigation__additional">Stats</a>
-  </nav>`;
-};
+  </nav>`
+);

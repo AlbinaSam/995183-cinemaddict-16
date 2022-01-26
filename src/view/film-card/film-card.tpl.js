@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
-export const createFilmCardTemplate = (film, comments) => {
-  const {filmInfo, userDetails} = film;
+export const createFilmCardTemplate = (film) => {
+  const {comments, filmInfo, userDetails} = film;
   const {poster, title, totalRating, release, runtime, genre, description} = filmInfo;
   const {watchlist, alreadyWatched, favourite} = userDetails;
 
