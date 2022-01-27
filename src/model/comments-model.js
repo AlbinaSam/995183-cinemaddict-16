@@ -1,4 +1,4 @@
-import AbstractObservable from '../utils/abstract-observable';
+import AbstractObservable from '../services/abstract-observable';
 import {UpdateType} from '../consts';
 import {adaptFilmToClient} from '../utils/utils';
 
@@ -36,7 +36,6 @@ export default class CommentsModel extends AbstractObservable {
 
       this.#comments = comments;
 
-      //обновляем модель фильмов
       const filmToUpdate = this.#filmsModel.films.find((item) => item.id === filmId);
       filmToUpdate.comments = movie.comments;
 
@@ -59,8 +58,6 @@ export default class CommentsModel extends AbstractObservable {
         ...this.#comments.slice(0, index),
         ...this.#comments.slice(index + 1)
       ];
-
-      //обновляем модель фильмов
 
       const filmToUpdate = this.#filmsModel.films.find((item) => item.id === filmId);
 
