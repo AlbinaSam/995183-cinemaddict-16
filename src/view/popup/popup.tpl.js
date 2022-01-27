@@ -1,7 +1,9 @@
 import he from 'he';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(duration);
+dayjs.extend(relativeTime);
 import {Emotions} from '../../consts.js';
 
 const createPopupGenresTemplate = (genres) => (
@@ -13,7 +15,8 @@ const createPopupGenresTemplate = (genres) => (
 );
 
 const createPopupCommentsTemplate = (comments, isDeleting, deletingCommentId) => {
-  const formatCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:MM');
+
+  const formatCommentDate = (date) => dayjs(date).fromNow();
 
   return `${comments.length > 0 ? comments.map((comment) => `<li class="film-details__comment" data-comment-id="${comment.id}">
   <span class="film-details__comment-emoji">

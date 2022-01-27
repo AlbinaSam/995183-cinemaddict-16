@@ -122,15 +122,4 @@ export default class PopupView extends SmartView {
     isDeleting: false,
     deletingCommentId: ''
   });
-
-  // static parseDataToFilm = (data) => {
-  //   const film = {...data};
-  //   delete film.localComment;
-  //   delete film.scrollPosition;
-  //   delete film.isSaving;
-  //   delete film.isDeleting;
-  //   delete film.deletingCommentId;
-
-  //   return film;
-  // }
 }

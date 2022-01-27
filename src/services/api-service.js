@@ -1,4 +1,8 @@
-import {Method} from './consts';
+import {Method} from '../consts';
+import {adaptFilmToServer} from '../utils/utils';
+
+export const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
+export const AUTHORIZATION = 'Basic h58vv5we5cmf09f';
 
 export default class ApiService {
   #endPoint = null;
@@ -20,7 +24,7 @@ export default class ApiService {
   updateFilm = async (film) => {
     const response = await this.#load({url:`movies/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(this.#adaptToServer(film)),
+      body: JSON.stringify(adaptFilmToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
@@ -79,34 +83,5 @@ export default class ApiService {
 
   static catchError = (err) => {
     throw err;
-  }
-
-  #adaptToServer = (film) => {
-    const adaptedFilm = {...film,
-      'film_info': {...film.filmInfo,
-        'age_rating': film.filmInfo.ageRating,
-        'alternative_title': film.filmInfo.alternativeTitle,
-        'total_rating': film.filmInfo.totalRating,
-        release: {...film.filmInfo.release,
-          date: film.filmInfo.release.date.toISOString(),
-          'release_country': film.filmInfo.release.releaseCountry
-        }
-      },
-      'user_details': {...film.userDetails,
-        'already_watched': film.userDetails.alreadyWatched,
-        'watching_date': film.userDetails.watchingDate.toISOString()
-      }
-    };
-
-    delete adaptedFilm.filmInfo;
-    delete adaptedFilm.film_info.ageRating;
-    delete adaptedFilm.film_info.alternativeTitle;
-    delete adaptedFilm.film_info.totalRating;
-    delete adaptedFilm.film_info.release.releaseCountry;
-    delete adaptedFilm.userDetails;
-    delete adaptedFilm.user_details.alreadyWatched;
-    delete adaptedFilm.user_details.watchingDate;
-
-    return adaptedFilm;
   }
 }

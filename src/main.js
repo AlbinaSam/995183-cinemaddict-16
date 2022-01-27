@@ -12,10 +12,8 @@ import FilterPresenter from './presenter/filter-presenter';
 import {RenderPosition, render, remove} from './utils/render';
 import {STATISTICS_LINK} from './consts';
 
-import ApiService from './api-service';
-
-const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
-const AUTHORIZATION = 'Basic h58vv5we5cmf09f';
+import ApiService from './services/api-service';
+import {END_POINT, AUTHORIZATION} from './services/api-service';
 
 const filmsModel = new FilmsModel(new ApiService(END_POINT, AUTHORIZATION));
 

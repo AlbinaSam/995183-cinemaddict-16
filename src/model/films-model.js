@@ -1,4 +1,4 @@
-import AbstractObservable from '../utils/abstract-observable';
+import AbstractObservable from '../services/abstract-observable';
 import {UpdateType} from '../consts';
 import {adaptFilmToClient} from '../utils/utils';
 
