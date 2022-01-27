@@ -16,7 +16,7 @@ export const createStaticticsTemplate = (films) => {
     const minutes = filmDuration.minutes();
     return {
       hours,
-      minutes
+      minutes,
     };
   };
 

@@ -8,8 +8,7 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
 
 export const createFilterTemplate = (filters, currentFilterType) => {
 
-  const filterItemsTemplate = filters.map((filter) => createFilterItemTemplate(filter, currentFilterType)
-  ).join('');
+  const filterItemsTemplate = filters.map((filter) => createFilterItemTemplate(filter, currentFilterType)).join('');
 
   return `<div class="main-navigation__items">
     ${filterItemsTemplate}

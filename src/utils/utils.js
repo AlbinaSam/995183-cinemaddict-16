@@ -41,13 +41,13 @@ export const adaptFilmToClient = (film) => {
       totalRating: film.film_info.total_rating,
       release: {...film.film_info.release,
         date: new Date(film.film_info.release.date),
-        releaseCountry: film.film_info.release.release_country
-      }
+        releaseCountry: film.film_info.release.release_country,
+      },
     },
     userDetails: {...film.user_details,
       alreadyWatched: film.user_details.already_watched,
-      watchingDate: new Date(film.user_details.watching_date)
-    }
+      watchingDate: new Date(film.user_details.watching_date),
+    },
   };
 
   delete adaptedFilm.film_info;
@@ -70,13 +70,13 @@ export const adaptFilmToServer = (film) => {
       'total_rating': film.filmInfo.totalRating,
       release: {...film.filmInfo.release,
         date: film.filmInfo.release.date.toISOString(),
-        'release_country': film.filmInfo.release.releaseCountry
-      }
+        'release_country': film.filmInfo.release.releaseCountry,
+      },
     },
     'user_details': {...film.userDetails,
       'already_watched': film.userDetails.alreadyWatched,
-      'watching_date': film.userDetails.watchingDate.toISOString()
-    }
+      'watching_date': film.userDetails.watchingDate.toISOString(),
+    },
   };
 
   delete adaptedFilm.filmInfo;

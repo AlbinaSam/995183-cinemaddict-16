@@ -21,5 +21,5 @@ export const statPeriods = {
   [PeriodsNames.TODAY]: (films) => films.filter((film) => dayjs().isSame(dayjs(film.userDetails.watchingDate), 'day')),
   [PeriodsNames.WEEK]: (films) => films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dayjs(), dayjs().subtract(1, 'week'), 'day', '[]')),
   [PeriodsNames.MONTH]: (films) => films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dayjs(), dayjs().subtract(1, 'month'), 'day', '[]')),
-  [PeriodsNames.YEAR]: (films) => films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dayjs(), dayjs().subtract(1, 'year'), 'day', '[]'))
+  [PeriodsNames.YEAR]: (films) => films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dayjs(), dayjs().subtract(1, 'year'), 'day', '[]')),
 };

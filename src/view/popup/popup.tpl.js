@@ -9,8 +9,8 @@ import {Emotions} from '../../consts.js';
 const createPopupGenresTemplate = (genres) => (
   `<td class="film-details__term">${genres.length > 1 ? 'Genres':'Genre'}</td>
     <td class="film-details__cell">
-      ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>
-    </td>`).join('')}
+      ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('')}
+    </td>
   </tr>`
 );
 
