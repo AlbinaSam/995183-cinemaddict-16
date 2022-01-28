@@ -1,7 +1,7 @@
 import AbstractView from '../abstract-view.js';
-import {createTotalFilmNumberTemplate} from './footer-statistics.tpl.js';
+import {createFooterStatisticsTemplate} from './footer-statistics.tpl.js';
 
-export default class TotalFilmNumberView extends AbstractView {
+export default class FooterStatisticsView extends AbstractView {
   #filmsNumber = null;
 
   constructor(filmsNumber) {
@@ -10,6 +10,6 @@ export default class TotalFilmNumberView extends AbstractView {
   }
 
   get template() {
-    return createTotalFilmNumberTemplate(this.#filmsNumber);
+    return createFooterStatisticsTemplate(this.#filmsNumber);
   }
 }

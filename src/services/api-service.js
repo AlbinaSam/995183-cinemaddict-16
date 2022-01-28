@@ -21,36 +21,53 @@ export default class ApiService {
   getComments = (filmId) => this.#load({url: `comments/${filmId}`})
     .then(ApiService.parseResponse);
 
-  updateFilm = async (film) => {
-    const response = await this.#load({url:`movies/${film.id}`,
-      method: Method.PUT,
-      body: JSON.stringify(adaptFilmToServer(film)),
-      headers: new Headers({'Content-Type': 'application/json'})
-    });
+  // updateFilm = async (film) => {
+  //   const response = await this.#load({url:`movies/${film.id}`,
+  //     method: Method.PUT,
+  //     body: JSON.stringify(adaptFilmToServer(film)),
+  //     headers: new Headers({'Content-Type': 'application/json'})
+  //   });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-    return parsedResponse;
-  }
+  //   const parsedResponse = await ApiService.parseResponse(response);
+  //   return parsedResponse;
+  // }
 
-  addComment = async (comment, filmId) => {
-    const response = await this.#load({url: `comments/${filmId}`,
-      method: Method.POST,
-      body: JSON.stringify(comment),
-      headers: new Headers({'Content-Type': 'application/json'})
-    });
+  updateFilm = async (film) => this.#load({url:`movies/${film.id}`,
+    method: Method.PUT,
+    body: JSON.stringify(adaptFilmToServer(film)),
+    headers: new Headers({'Content-Type': 'application/json'})
+  }).then(ApiService.parseResponse);
 
-    const parsedResponse = await ApiService.parseResponse(response);
-    return parsedResponse;
-  }
+  // addComment = async (comment, filmId) => {
+  //   const response = await this.#load({url: `comments/${filmId}`,
+  //     method: Method.POST,
+  //     body: JSON.stringify(comment),
+  //     headers: new Headers({'Content-Type': 'application/json'})
+  //   });
 
-  deleteComment = async (comment) => {
+  //   const parsedResponse = await ApiService.parseResponse(response);
+  //   return parsedResponse;
+  // }
 
-    const response = await this.#load({url: `comments/${comment.id}`,
-      method: Method.DELETE
-    });
+  addComment = async (comment, filmId) => this.#load({url: `comments/${filmId}`,
+    method: Method.POST,
+    body: JSON.stringify(comment),
+    headers: new Headers({'Content-Type': 'application/json'})
+  }).then(ApiService.parseResponse);
 
-    return response;
-  }
+
+  // deleteComment = async (comment) => {
+
+  //   const response = await this.#load({url: `comments/${comment.id}`,
+  //     method: Method.DELETE
+  //   });
+
+  //   return response;
+  // }
+
+  deleteComment = async (comment) =>  this.#load({url: `comments/${comment.id}`, method: Method.DELETE
+  });
+
 
   #load = async ({
     url,

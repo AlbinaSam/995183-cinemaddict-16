@@ -1,5 +1,5 @@
 import MainNavigationView from './view/main-navigation/main-navigation-view';
-import TotalFilmNumberView from './view/footer-statistics/footer-statistics-view';
+import FooterStatisticsView from './view/footer-statistics/footer-statistics-view';
 import StatisticsView from './view/statistics/statistics-view';
 
 import FilmsModel from './model/films-model';
@@ -60,5 +60,5 @@ filmsModel.init().finally(() => {
   mainNavigationComponent.setNavClickHandler(handleNavItemClick);
 
   const footerStatisticsElement = document.querySelector('.footer__statistics');
-  render(footerStatisticsElement, new TotalFilmNumberView(filmsModel.films.length), RenderPosition.AFTERBEGIN);
+  render(footerStatisticsElement, new FooterStatisticsView(filmsModel.films.length), RenderPosition.AFTERBEGIN);
 });
